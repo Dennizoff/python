@@ -70,7 +70,8 @@ def update():
 
     if paddle.y <= ball.y <= paddle.y+paddle.h and paddle.x <= ball.x <= paddle.x+paddle.w:
         speedY *= -1  
-    if blocks.Block.x  <= ball.y <= blocks.Block.y+blocks.Block.h and blocks.Block.x <= ball.x <= blocks.Block.x+blocks.Block.w:
+        
+    if blocks.Block.x <= ball.y <= blocks.Block.y+blocks.Block.h and blocks.Block.x <= ball.x <= blocks.Block.x+blocks.Block.w:
         speedY *= -1  and blocks.pop(Block)
 
 pgzrun.go()

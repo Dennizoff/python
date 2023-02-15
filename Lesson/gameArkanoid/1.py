@@ -26,7 +26,7 @@ class Block():
 
 ball = Ball(WIDTH/2, HEIGHT-100, 10)
 
-paddle = Paddle(WIDTH/2-50, HEIGHT-100, 100, 20)
+paddle = Paddle(WIDTH/2-50, HEIGHT-20, 100, 20)
 
 blocks = []
 
@@ -41,23 +41,36 @@ speed = 5
 speedX = speed
 speedY = speed
 
+lifes = 3
+score = 0
+
 pygame.mouse.set_visible(False)
 
 background = pygame.image.load('./img/1.jpg')
+heart = pygame.image.load('./img/heart.png')
+heart = pygame.transform.scale(heart, (20,20))
 
 def draw():
     screen.blit(background,(0, 0))
+    
 
     screen.draw.filled_circle((ball.x,ball.y), ball.r, 'red')
     screen.draw.filled_rect(Rect((paddle.x,paddle.y), (paddle.w, paddle.h)), 'green')
 
     for block in blocks:
         screen.draw.filled_rect(Rect((block.x,block.y), (block.w, block.h)), 'orange')
-
-    screen.draw.text("Score: "+str(ball.x), (100,0), color="black")
+    for life in range(lifes):
+        screen.blit(heart,(30*life, 0))
+    
+    # screen.draw.text("Lifes: "+str(lifes), (10,0), color="black")
+    screen.draw.text("Score: "+str(score), (WIDTH-100,0), color="black")
+    if lifes == 0:
+        screen.draw.text("Game Over", (WIDTH/2-100,HEIGHT/2-24), color="black", fontsize=48)
+    if len(blocks) <= 5:
+        screen.draw.text("You Win!", (WIDTH/2-100,HEIGHT/2-24), color="black", fontsize=48)
 
 def update():
-    global speedX, speedY
+    global speedX, speedY, score, lifes
 
     paddle.x = pygame.mouse.get_pos()[0]
     
@@ -65,10 +78,24 @@ def update():
         speedX *= -1
     if ball.y >= HEIGHT or ball.y < 0:
         speedY *= -1
+    if ball.y >= HEIGHT:
+        lifes-=1
     ball.x+=speedX
     ball.y+=speedY
 
     if paddle.y <= ball.y <= paddle.y+paddle.h and paddle.x <= ball.x <= paddle.x+paddle.w:
         speedY *= -1  
+
+    for block in blocks:
+        if block.y <= ball.y <= block.y+block.h and block.x <= ball.x <= block.x+block.w:
+            speedY *= -1  
+            blocks.remove(block)
+            score+=1
+    if lifes == 0:
+        speedX = 0
+        speedY = 0
+        ball.x = WIDTH/2
+        ball.y = HEIGHT-100
+    
 
 pgzrun.go()
