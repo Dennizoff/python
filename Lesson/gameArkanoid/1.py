@@ -1,5 +1,6 @@
 import pgzrun
 import pygame.mouse
+import random
 
 WIDTH = 500
 HEIGHT = 400
@@ -66,7 +67,7 @@ def draw():
     screen.draw.text("Score: "+str(score), (WIDTH-100,0), color="black")
     if lifes == 0:
         screen.draw.text("Game Over", (WIDTH/2-100,HEIGHT/2-24), color="black", fontsize=48)
-    if len(blocks) <= 5:
+    if len(blocks) == 0:
         screen.draw.text("You Win!", (WIDTH/2-100,HEIGHT/2-24), color="black", fontsize=48)
 
 def update():
@@ -88,10 +89,13 @@ def update():
 
     for block in blocks:
         if block.y <= ball.y <= block.y+block.h and block.x <= ball.x <= block.x+block.w:
-            speedY *= -1  
+            speedY *= -1
+            # 0-3 if rand==0
+            # extralifes.append(Extralife(block.x, block.y))
             blocks.remove(block)
             score+=1
-    if lifes == 0:
+    
+    if lifes == 0 or len(blocks) == 0:
         speedX = 0
         speedY = 0
         ball.x = WIDTH/2
@@ -99,3 +103,6 @@ def update():
     
 
 pgzrun.go()
+# next step
+# серце, появляються рандомно коли наш мяч знищує блок, на його місці може появитися серце, який буде падати, добавити додаткове життя
+# бонуси, появляються рандомно коли наш мяч знищує блок, на його місці може появитися бонус, який буде падати, робити платформу 2х
