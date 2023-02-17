@@ -12,6 +12,7 @@ class Ball():
         self.r = r
 
 class Paddle():
+    static_w = 100
     def __init__(self, x, y, w, h):
         self.x = x
         self.y = y
@@ -45,6 +46,8 @@ speedY = speed
 lifes = 3
 score = 0
 
+timer = 180
+
 pygame.mouse.set_visible(False)
 
 background = pygame.image.load('./img/1.jpg')
@@ -71,7 +74,7 @@ def draw():
         screen.draw.text("You Win!", (WIDTH/2-100,HEIGHT/2-24), color="black", fontsize=48)
 
 def update():
-    global speedX, speedY, score, lifes
+    global speedX, speedY, score, lifes, timer
 
     paddle.x = pygame.mouse.get_pos()[0]
     
@@ -100,6 +103,14 @@ def update():
         speedY = 0
         ball.x = WIDTH/2
         ball.y = HEIGHT-100
+
+
+    if timer > 0:
+        timer-=1
+        paddle.w = paddle.static_w*2
+    else:
+        paddle.w = paddle.static_w
+
     
 
 pgzrun.go()
