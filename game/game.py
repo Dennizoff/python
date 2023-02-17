@@ -17,7 +17,9 @@ class Ball():
         self.r = r
 
 class Paddle():
+    static_w = 100
     def __init__(self, x, y, w, h):
+        
         self.x = x
         self.y = y
         self.w = w
@@ -37,7 +39,7 @@ class Extralife():
 
 
 extralifes = []
-
+bonuses = []
 
 ball = Ball(WIDTH/2, HEIGHT-100, 10)
 
@@ -57,9 +59,9 @@ speed = 5
 speedX = speed
 speedY = speed
 
+timer = 0
 lifes = 3
 score = 0
-
 pygame.mouse.set_visible(False)
 
 background = pygame.image.load('./img/1.jpg')
@@ -67,8 +69,8 @@ heart = pygame.image.load('./img/heart.png')
 heart = pygame.transform.scale(heart, (20,20))
 extralife_img = pygame.image.load('./img/heart.png')
 extralife_img = pygame.transform.scale(extralife_img, (20,20))
-bonus_img = pygame.image.load('./img/heart.png')
-
+bonus_img = pygame.image.load('./img/circleBonus.png')
+bonus_img = pygame.transform.scale(bonus_img, (20,20))
 def draw():
     screen.blit(background,(0, 0))
 
@@ -83,6 +85,9 @@ def draw():
 
     for extralife in extralifes:
         screen.blit(extralife_img,(extralife.x, extralife.y))
+    for bonus in bonuses:
+        screen.blit(bonus_img,(bonus.x, bonus.y))
+
 
     # screen.draw.text("Lifes: "+str(lifes), (10,0), color="black")
     screen.draw.text("Score: "+str(score), (WIDTH-100,0), color="black")
@@ -92,7 +97,8 @@ def draw():
         screen.draw.text("You Win!", (WIDTH/2-100,HEIGHT/2-24), color="black", fontsize=48)
 
 def update():
-    global speedX, speedY, score, lifes
+    
+    global speedX, speedY, score, lifes, timer
 
     paddle.x = pygame.mouse.get_pos()[0]
 
@@ -112,8 +118,24 @@ def update():
         elif  paddle.y <= extralife.y+20 <= paddle.y+paddle.h and paddle.x <= extralife.x+10 <= paddle.x+paddle.w:
             extralifes.remove(extralife)
             lifes += 1
-        
 
+
+    for bonus in bonuses:
+        bonus.y += 1
+        if bonus.y > HEIGHT:
+            bonuses.remove(bonus)
+        elif  paddle.y <= bonus.y+20 <= paddle.y+paddle.h and paddle.x <= bonus.x+10 <= paddle.x+paddle.w:
+            bonuses.remove(bonus)
+            timer +=400
+
+    
+    
+
+    if timer > 0:
+        timer-=1
+        paddle.w = paddle.static_w*2
+    else:
+        paddle.w = paddle.static_w
 
     if paddle.y <= ball.y <= paddle.y+paddle.h and paddle.x <= ball.x <= paddle.x+paddle.w:
         speedY *= -1  
@@ -123,11 +145,12 @@ def update():
             speedY *= -1
             blocks.remove(block)
             score+=1
-            rand = random.randrange(0, 2)
+            rand = random.randrange(0, 4)
             print(rand)
             if rand == 0:
-                extralifes.append(Extralife(block.x, block.y))
-    
+                extralifes.append(Extralife(block.x, block.y)) 
+            elif rand ==1:
+                bonuses.append(Bonus(block.x, block.y)) 
 
 
     if lifes == 0 or len(blocks) == 0:
