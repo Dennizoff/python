@@ -19,18 +19,18 @@ class Block():
         self.w = w
         self.h = h
 
-car = Car(WIDTH/2-50, HEIGHT-20, 100, 20)
+car = Car(WIDTH/2-45, HEIGHT-100, 45, 90)
 
 
 blocks = []
 
 
 for i in range(3):
-    blocks.append(Block(10 + 70*i, 30, 60, 20))
+    blocks.append(Block(10 + 200*i, 30, 60, 20))
 for i in range(5):
-    blocks.append(Block(40 + 70*i, 70, 60, 20))
+    blocks.append(Block(40 + 250*i, 70, 60, 20))
 for i in range(3):
-    blocks.append(Block(10 + 70*i, 110, 60, 20))
+    blocks.append(Block(10 + 200*i, 110, 60, 20))
 
 
 speed = 5
@@ -42,8 +42,8 @@ pygame.mouse.set_visible(False)
 
 
 background = pygame.image.load('./img/road.jpg')
-car = pygame.image.load('./img/car.png')
-car = pygame.transform.scale(car, (50,50))
+car_pic = pygame.image.load('./img/car.png')
+car_pic = pygame.transform.scale(car_pic, (0,0))
 
 
 def draw():
