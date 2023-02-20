@@ -24,53 +24,53 @@ car = Car(WIDTH/2-45, HEIGHT-100, 45, 90)
 
 blocks = []
 
-
-for i in range(3):
-    blocks.append(Block(10 + 200*i, 30, 60, 20))
-for i in range(5):
-    blocks.append(Block(40 + 250*i, 70, 60, 20))
-for i in range(3):
-    blocks.append(Block(10 + 200*i, 110, 60, 20))
-
-
-speed = 5
-speedX = speed
-speedY = speed
-
+speed = 4
 
 pygame.mouse.set_visible(False)
 
-
 background = pygame.image.load('./img/road.jpg')
 car_pic = pygame.image.load('./img/car.png')
-car_pic = pygame.transform.scale(car_pic, (0,0))
+car_pic = pygame.transform.scale(car_pic, (50,80))
 
 
 def draw():
     screen.blit(background,(0, 0))
+    screen.blit(car_pic,(car.x, car.y))
+
+    # screen.draw.text("Score: "+str(len(blocks)), (WIDTH-100,0), color="black")
 
     for block in blocks:
-            screen.draw.filled_rect(Rect((block.x,block.y), (block.w, block.h)), 'black')
+        screen.draw.filled_rect(Rect((block.x,block.y), (block.w, block.h)), 'black')
 
 
 
 def update():
-    global speedX, speedY
+    global speed
 
-    car.x = pygame.mouse.get_pos()[0]
+    position = pygame.mouse.get_pos()[0]
+    if position >= 270 and position <= 350:
+        car.x = position 
+    elif position < 270:
+        car.x = 270
+    elif position > 350:
+        car.x = 350
 
-        
-    car.x+=speedX
-    car.y+=speedY
+    if len(blocks) < 1:
+        rand = random.randrange(0, 2)
+        if rand == 0:
+            blocks.append(Block(350, 0, 20, 40))
+        else:
+            blocks.append(Block(300, 0, 20, 40))
 
+    for block in blocks:
+        block.y += speed
+        if block.y > HEIGHT:
+            blocks.remove(block)
 
-
-
-
-
-
-
-
-
+    # speed+=0.1
 
 pgzrun.go()
+
+# замість чорного прямокутника, рандомне зображення машинки
+# бонус зменшувати швидкість і додавати бали
+# на лівій полосі, машинки в зворотню сторону будуть їхати
