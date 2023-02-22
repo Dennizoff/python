@@ -19,7 +19,8 @@ class Block():
         self.w = w
         self.h = h
 
-car = Car(WIDTH/2-45, HEIGHT-100, 45, 90)
+car = Car(WIDTH/2-45, HEIGHT-100, 45, 90) 
+block = Block(WIDTH/2-45, HEIGHT-100, 45, 90) 
 
 
 blocks = []
@@ -31,16 +32,20 @@ pygame.mouse.set_visible(False)
 background = pygame.image.load('./img/road.jpg')
 car_pic = pygame.image.load('./img/car.png')
 car_pic = pygame.transform.scale(car_pic, (50,80))
-
+block_pic = pygame.image.load('./img/car2.png')
+block_pic = pygame.transform.scale(block_pic, (50,80))
 
 def draw():
     screen.blit(background,(0, 0))
     screen.blit(car_pic,(car.x, car.y))
+    
+    screen.draw.text("Score: "+str(car.x), (WIDTH-100,0), color="black")
 
     # screen.draw.text("Score: "+str(len(blocks)), (WIDTH-100,0), color="black")
 
     for block in blocks:
-        screen.draw.filled_rect(Rect((block.x,block.y), (block.w, block.h)), 'black')
+       screen.blit(block_pic,(block.x, block.y))
+
 
 
 
@@ -54,18 +59,33 @@ def update():
         car.x = 270
     elif position > 350:
         car.x = 350
+        # 97,180
 
     if len(blocks) < 1:
         rand = random.randrange(0, 2)
         if rand == 0:
-            blocks.append(Block(350, 0, 20, 40))
+            blocks.append(Block(350, 0, 20, 40)) 
+            
+            blocks.append(Block(97, 0, 20, 40)) 
+
         else:
             blocks.append(Block(300, 0, 20, 40))
+            
+            blocks.append(Block(180, 0, 20, 40)) 
 
     for block in blocks:
         block.y += speed
         if block.y > HEIGHT:
             blocks.remove(block)
+
+    for block in blocks:
+         if car.y <= block.y <= block.y+block.h and block.x <= car.x <= block.x+block.w:
+             speed = 0
+             position = (270+350)/2 #не працює
+
+             screen.draw.text("Game Over", (WIDTH/2-100,HEIGHT/2-24), color="black", fontsize=48)#не працює
+
+
 
     # speed+=0.1
 
