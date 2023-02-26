@@ -32,15 +32,15 @@ class Block2():
         self.x = x
         self.y = y
 car = Car(WIDTH/2-45, HEIGHT-100, 45, 90) 
-block = Block(WIDTH/2-45, HEIGHT-100) 
-block2 = Block2(WIDTH/2-45, HEIGHT-100) 
+# block = Block(WIDTH/2-45, HEIGHT-100) 
+# block2 = Block2(WIDTH/2-45, HEIGHT-100) 
 
 
 
 bonuses = []
 
-blocks2 = []
 blocks = []
+blocks2 = []
 
 speed = 3
 speed2 = -3
@@ -81,12 +81,15 @@ def draw():
     
 
     # screen.draw.text("Score: "+str(len(blocks)), (WIDTH-100,0), color="black")
-
+    print(len(blocks2))
     for block in blocks:
        screen.blit(block_pic,(block.x, block.y))
     
     for block2 in blocks2:
        screen.blit(block2_pic,(block2.x, block2.y))
+
+    if gameOver:
+        screen.draw.text("Game Over", (WIDTH/2-100,HEIGHT/2-24), color="black", fontsize=48)
     #    screen.draw.filled_rect(Rect((block.x,block.y), (cut, cut)), 'orange')
     #    screen.draw.filled_rect(Rect((block.x+block.w-cut,block.y), (cut, cut)), 'orange')
 
@@ -101,10 +104,12 @@ def draw():
     # screen.draw.text(str(block.x)+" "+str(block.w), (WIDTH-200,0), color="black")
 
 
-
+gameOver = False
 
 def update():
-    global speed, fixedCar, position, bonuses
+    global speed, fixedCar, position, bonuses, gameOver
+    if gameOver:
+        return 0
 
     if fixedCar == 0:
         position = pygame.mouse.get_pos()[0]
@@ -118,11 +123,10 @@ def update():
         # 106,177
 
 
-    rand = random.randrange(0, 100*int(speed)+1)
+    rand = random.randrange(0, int(1000/speed) if speed > 0 else 1000)
     if rand == 0:
         bonuses.append(Bonus(350, 0)) 
     elif rand == 2:
-    
         bonuses.append(Bonus(97, 0,)) 
 
     for bonus in bonuses:
@@ -131,27 +135,19 @@ def update():
             bonuses.remove(bonus)
 
     
-
- 
-
-
-
     if len(blocks) < 1:
         rand = random.randrange(0, 2)
         if rand == 0:
             blocks.append(Block(350, 0)) 
-            
-
         else:
             blocks.append(Block(300, 0))
             
 
 
     if len(blocks2) < 1:
-        rand = random.randrange(0, 1)
+        rand = random.randrange(0, 2)
         if rand == 0:
             blocks2.append(Block2(106, 350))  
-
         else:
             blocks2.append(Block2(177, 300))
 
@@ -162,26 +158,27 @@ def update():
 
     for block2 in blocks2:
         block2.y += speed2
-        if block2.y > -HEIGHT:
+        if block2.y < 0:
             blocks2.remove(block2)
 
 
     for bonus in bonuses:
          if  (bonus.x <= car.x <= bonus.x+bonus.w or bonus.x <= car.x+car.w <= bonus.x+bonus.w) and (bonus.y <= car.y <= bonus.y+bonus.h or bonus.y <= car.y+car.h <= bonus.y+bonus.h ):
-            speed -= 1
+            if speed > 0.5:
+                speed -= 0.2
 
     for block in blocks:
          if  (block.x <= car.x <= block.x+block.w or block.x <= car.x+car.w <= block.x+block.w) and (block.y <= car.y <= block.y+block.h or block.y <= car.y+car.h <= block.y+block.h ):
             #  position = (270+350)/2 #не працює
             # blocks.remove(block)
-             speed = 0
+            speed = 0
+            gameOver = True
+            break
+         else:
+            speed+=0.005   
             #  fixedCar = position
 
-            #  screen.draw.text("Game Over", (WIDTH/2-100,HEIGHT/2-24), color="black", fontsize=48)#не працює
-
-
-
-    speed+=0.1
+    
 
 pgzrun.go()
 

@@ -15,18 +15,33 @@ def multi(e):
         label1.config(text=f"{num1} * {num2} = {num1*num2}")
 
 
-def sizeAdd(e):
-    global size
-    size += 1
-def sizeMinus(e):
-    global size, img1
-    size += 1
-    img1 = img1.subsample(size, size)
-    label2 = Label(w, image=img1)
-    label2.place(x=100, y=200)
+# def sizeAdd(e):
+#     global size, img1, label2
+#     size += 1
+#     img1 = img1.zoom(size)
+#     label2.config(image=img1)
+#     label2.place(x=100, y=200)
+
     
-size = 1
-img1 = PhotoImage(file="pictures/car2.png")
+# def sizeMinus(e):
+#     global size, img1, label2
+#     size -= 1
+#     # img1 = img1.subsample(size, size)
+#     img1 = img1.zoom(size)
+#     label2.config(image=img1)
+#     label2.place(x=100, y=200)
+    
+    
+# size = 2
+# img1 = PhotoImage(file="pictures/car2.png")
+# # img1 = img1.subsample(10, 10)
+# # img1 = img1.subsample(10, 10)
+# # img1 = img1.zoom(size)
+# label2 = Label(w, image=img1)
+# label2.pack()
+# # label2.place(x=100, y=200)
+
+
 
 
 
@@ -48,12 +63,12 @@ label1.place(x=50, y=100)
 
 
 
-btn2 = Button(w, text="Збільшити")
-btn2.place(x=250, y=100)
-btn2.bind("<Button-1>", sizeAdd)
+# btn2 = Button(w, text="Збільшити")
+# btn2.place(x=250, y=100)
+# btn2.bind("<Button-1>", sizeAdd)
 
-btn3 = Button(w, text="Зменшити")
-btn3.place(x=350, y=100)
-btn3.bind("<Button-1>", sizeMinus)
+# btn3 = Button(w, text="Зменшити")
+# btn3.place(x=350, y=100)
+# btn3.bind("<Button-1>", sizeMinus)
 
 w.mainloop()
