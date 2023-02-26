@@ -5,6 +5,11 @@ import random
 WIDTH = 500
 HEIGHT = 400
 
+class Bonus():
+    def __init__(self, x, y) :
+         self.x = x
+         self.y = y
+
 class Ball():
     def __init__(self, x, y, r):
         self.x = x
