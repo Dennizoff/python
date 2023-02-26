@@ -12,6 +12,12 @@ class Car():
           self.w = w
           self.h = h 
 
+class Bonus():
+    def __init__(self, x, y,) :
+         self.x = x
+         self.y = y
+         self.h = 20
+         self.w = 20
 class Block():
     w = 45
     h = 80
@@ -19,13 +25,28 @@ class Block():
         self.x = x
         self.y = y
 
+class Block2():
+    w = 45
+    h = 80
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
 car = Car(WIDTH/2-45, HEIGHT-100, 45, 90) 
 block = Block(WIDTH/2-45, HEIGHT-100) 
+block2 = Block2(WIDTH/2-45, HEIGHT-100) 
 
 
+
+bonuses = []
+
+blocks2 = []
 blocks = []
 
-speed = 4
+speed = 3
+speed2 = -3
+
+
+
 
 pygame.mouse.set_visible(False)
 
@@ -34,7 +55,11 @@ car_pic = pygame.image.load('./img/car.png')
 car_pic = pygame.transform.scale(car_pic, (car.w,car.h))
 block_pic = pygame.image.load('./img/car2.png')
 block_pic = pygame.transform.scale(block_pic, (Block.w,Block.h))
-
+bonus_pic = pygame.image.load('./img/circleBonus.png')
+bonus_pic = pygame.transform.scale(bonus_pic, (20,20))
+block2_pic = pygame.image.load('./img/car3.png')
+block2_pic = pygame.transform.scale(block2_pic, (Block2.w,Block2.h))
+    
 cut = 10
 fixedCar = 0
 position = 0
@@ -42,8 +67,16 @@ position = 0
 def draw():
     screen.blit(background,(0, 0))
     screen.blit(car_pic,(car.x, car.y))
+    # screen.blit(block2_pic,(block2.x, block2.y))
+    for bonus in bonuses:
+        screen.blit(bonus_pic,(bonus.x, bonus.y))
+
+
+
+
+
     
-    screen.draw.text("Score: "+str(car.x), (WIDTH-100,0), color="black")
+    # screen.draw.text("Score: "+str(block.y), (WIDTH-100,0), color="black")
 
     
 
@@ -51,6 +84,9 @@ def draw():
 
     for block in blocks:
        screen.blit(block_pic,(block.x, block.y))
+    
+    for block2 in blocks2:
+       screen.blit(block2_pic,(block2.x, block2.y))
     #    screen.draw.filled_rect(Rect((block.x,block.y), (cut, cut)), 'orange')
     #    screen.draw.filled_rect(Rect((block.x+block.w-cut,block.y), (cut, cut)), 'orange')
 
@@ -68,7 +104,7 @@ def draw():
 
 
 def update():
-    global speed, fixedCar, position
+    global speed, fixedCar, position, bonuses
 
     if fixedCar == 0:
         position = pygame.mouse.get_pos()[0]
@@ -79,37 +115,73 @@ def update():
         car.x = 270
     elif position > 350:
         car.x = 350
-        # 97,180
+        # 106,177
+
+
+    rand = random.randrange(0, 100*int(speed)+1)
+    if rand == 0:
+        bonuses.append(Bonus(350, 0)) 
+    elif rand == 2:
+    
+        bonuses.append(Bonus(97, 0,)) 
+
+    for bonus in bonuses:
+        bonus.y += speed
+        if bonus.y > HEIGHT:
+            bonuses.remove(bonus)
+
+    
+
+ 
+
+
 
     if len(blocks) < 1:
         rand = random.randrange(0, 2)
         if rand == 0:
             blocks.append(Block(350, 0)) 
             
-            blocks.append(Block(97, 0)) 
 
         else:
             blocks.append(Block(300, 0))
             
-            blocks.append(Block(180, 0)) 
+
+
+    if len(blocks2) < 1:
+        rand = random.randrange(0, 1)
+        if rand == 0:
+            blocks2.append(Block2(106, 350))  
+
+        else:
+            blocks2.append(Block2(177, 300))
 
     for block in blocks:
         block.y += speed
         if block.y > HEIGHT:
             blocks.remove(block)
 
+    for block2 in blocks2:
+        block2.y += speed2
+        if block2.y > -HEIGHT:
+            blocks2.remove(block2)
+
+
+    for bonus in bonuses:
+         if  (bonus.x <= car.x <= bonus.x+bonus.w or bonus.x <= car.x+car.w <= bonus.x+bonus.w) and (bonus.y <= car.y <= bonus.y+bonus.h or bonus.y <= car.y+car.h <= bonus.y+bonus.h ):
+            speed -= 1
+
     for block in blocks:
          if  (block.x <= car.x <= block.x+block.w or block.x <= car.x+car.w <= block.x+block.w) and (block.y <= car.y <= block.y+block.h or block.y <= car.y+car.h <= block.y+block.h ):
             #  position = (270+350)/2 #не працює
-            blocks.remove(block)
-            #  speed = 0
+            # blocks.remove(block)
+             speed = 0
             #  fixedCar = position
 
             #  screen.draw.text("Game Over", (WIDTH/2-100,HEIGHT/2-24), color="black", fontsize=48)#не працює
 
 
 
-    # speed+=0.1
+    speed+=0.1
 
 pgzrun.go()
 
